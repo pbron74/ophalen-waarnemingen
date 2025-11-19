@@ -2,8 +2,8 @@ from setuptools import setup
 
 APP = ['meldingen_per_gemeente_distributie.pyw']
 DATA_FILES = [
-    'clustering_van_meldingen.pyw',
-    'vallenplan.pyw',
+    'clustering_van_meldingen_distributie.pyw',
+    'vallenplan_met_keuzes.pyw',
     'scrape_en_exporteer_distributie.pyw',
 ]
 
@@ -28,5 +28,6 @@ setup(
     setup_requires=['py2app'],
 
 )
+
 
 
