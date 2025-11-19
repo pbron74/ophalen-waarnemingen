@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meldingen_per_gemeente-macOS
-          path: dist/ meldingen_per_gemeente.app
+          path: dist/meldingen_per_gemeente.app
