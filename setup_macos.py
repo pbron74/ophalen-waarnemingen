@@ -1,7 +1,7 @@
 from setuptools import setup
 
 APP = ['meldingen_per_gemeente_distributie.pyw']
-DATA_FILES = []
+DATA_FILES = ['clustering_van_meldingen.pyw', 'vallenplan.pyw']
 OPTIONS = {
     'argv_emulation': True,
     'iconfile': None,  # Voeg hier een .icns-bestand toe als je een app-icoon wilt
@@ -23,3 +23,4 @@ setup(
     setup_requires=['py2app'],
 
 )
+
