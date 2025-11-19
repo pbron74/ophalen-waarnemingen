@@ -1,6 +1,6 @@
 from setuptools import setup
 
-APP = ['meldingen_per_gemeente_distibutie.pyw']
+APP = ['meldingen_per_gemeente_distributie.pyw']
 DATA_FILES = []
 OPTIONS = {
     'argv_emulation': True,
@@ -21,4 +21,5 @@ setup(
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
+
 )
