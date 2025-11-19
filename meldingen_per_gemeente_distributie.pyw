@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime, timedelta
+import subprocess
+import os
+import sys
 
 # ✅ Veilige import van scraper
 try:
@@ -9,6 +12,22 @@ except Exception as e:
     print(f"❌ Fout bij importeren van scraper: {e}")
     gemeente_dict = {}
 
+# 🧠 Functies voor extra scripts
+def start_clustering():
+    try:
+        script_path = os.path.join(os.path.dirname(sys.argv[0]), "clustering_van_meldingen.pyw")
+        subprocess.Popen([sys.executable, script_path])
+    except Exception as e:
+        status_var.set(f"❌ Fout bij starten clustering: {e}")
+
+def start_vallenplan():
+    try:
+        script_path = os.path.join(os.path.dirname(sys.argv[0]), "vallenplan.pyw")
+        subprocess.Popen([sys.executable, script_path])
+    except Exception as e:
+        status_var.set(f"❌ Fout bij starten vallenplan: {e}")
+
+# 🐝 Scrapingfunctie
 def start_scraping():
     gemeente = gemeente_var.get()
     weken_str = weken_var.get()
@@ -61,4 +80,8 @@ ttk.Entry(root, textvariable=weken_var, width=5).grid(row=1, column=1, padx=10, 
 ttk.Button(root, text="Start scraping", command=start_scraping).grid(row=2, column=0, columnspan=2, pady=10)
 ttk.Label(root, textvariable=status_var, foreground="blue").grid(row=3, column=0, columnspan=2, pady=5)
 
+ttk.Button(root, text="🧠 Start clustering", command=start_clustering).grid(row=4, column=0, columnspan=2, pady=5)
+ttk.Button(root, text="🪤 Genereer vallenplan", command=start_vallenplan).grid(row=5, column=0, columnspan=2, pady=5)
+
 root.mainloop()
+
