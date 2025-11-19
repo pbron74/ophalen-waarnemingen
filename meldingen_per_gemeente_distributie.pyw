@@ -15,14 +15,14 @@ except Exception as e:
 # 🧠 Functies voor extra scripts
 def start_clustering():
     try:
-        script_path = os.path.join(os.path.dirname(sys.argv[0]), "clustering_van_meldingen.pyw")
+        script_path = os.path.join(os.path.dirname(sys.argv[0]), "clustering_van_meldingen_distributie.pyw")
         subprocess.Popen([sys.executable, script_path])
     except Exception as e:
         status_var.set(f"❌ Fout bij starten clustering: {e}")
 
 def start_vallenplan():
     try:
-        script_path = os.path.join(os.path.dirname(sys.argv[0]), "vallenplan.pyw")
+        script_path = os.path.join(os.path.dirname(sys.argv[0]), "vallenplan_met_keuzes.pyw")
         subprocess.Popen([sys.executable, script_path])
     except Exception as e:
         status_var.set(f"❌ Fout bij starten vallenplan: {e}")
@@ -84,4 +84,5 @@ ttk.Button(root, text="🧠 Start clustering", command=start_clustering).grid(ro
 ttk.Button(root, text="🪤 Genereer vallenplan", command=start_vallenplan).grid(row=5, column=0, columnspan=2, pady=5)
 
 root.mainloop()
+
 
