@@ -1,0 +1,34 @@
+name: Build macOS App
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install py2app
+
+      - name: Build .app with py2app
+        run: python3 setup_macos.py py2app
+
+      - name: Upload .app artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: meldingen_per_gemeente-macOS
+          path: dist/ meldingen_per_gemeente.app
