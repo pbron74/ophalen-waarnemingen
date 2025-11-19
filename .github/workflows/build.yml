@@ -28,7 +28,7 @@ jobs:
         run: python3 setup_macos.py py2app
 
       - name: Upload .app artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: meldingen_per_gemeente-macOS
           path: dist/ meldingen_per_gemeente.app
