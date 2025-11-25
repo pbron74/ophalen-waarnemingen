@@ -1,6 +1,33 @@
 De AHlauncher-macOS-dmg.zip
+## 📦 Installatiehandleiding voor AHlauncher (macOS)
 
-#AHlauncher app 
+Volg deze stappen om AHlauncher op macOS te installeren:
+1. **Download het bestand**
+   - Klik op de downloadlink en haal `AHlauncher-macOS-dmg.zip` binnen.
+
+2. **Pak het ZIP-bestand uit**
+   - Dubbelklik op `AHlauncher-macOS-dmg.zip`.
+   - Je krijgt nu het bestand `AHlauncher.dmg`.
+
+3. **Open het DMG-bestand**
+   - Dubbelklik op `AHlauncher.dmg`.
+   - Er verschijnt een venster met het AHlauncher‑icoon en een snelkoppeling naar de **Applications** map.
+
+4. **Installeer de app**
+   - Sleep het **AHlauncher‑icoon** naar de **Applications** map.
+   - De app staat nu geïnstalleerd.
+
+5. **Start AHlauncher**
+   - Open de **Applications** map.
+   - Dubbelklik op **AHlauncher** om de app te starten.
+---
+### ℹ️ Extra tips
+- **Eerste keer openen:** macOS kan een waarschuwing geven (“app van onbekende ontwikkelaar”).  
+  Ga dan naar **Systeemvoorkeuren → Beveiliging en privacy → Open toch** om de app te starten.
+- **Verwijderen:** sleep AHlauncher gewoon uit de Applications map naar de prullenmand.
+---
+Met deze stappen heb je AHlauncher netjes geïnstalleerd op macOS 🎉.
+
 
 Na opening van de app zie je dit hoofdmenu:
 <img width="428" height="233" alt="afbeelding" src="https://github.com/user-attachments/assets/647f7d72-a57d-4dd3-aa76-0662b38d06b9" />
