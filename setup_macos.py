@@ -1,33 +1,34 @@
-from setuptools import setup
+name: Build AHlauncher macOS App
 
-APP = ['meldingen_per_gemeente_distributie.pyw']
-DATA_FILES = [
-    'clustering_van_meldingen_distributie.pyw',
-    'vallenplan_met_keuzes.pyw',
-    'scrape_en_exporteer_distributie.pyw',
-]
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-OPTIONS = {
-    'argv_emulation': True,
-    'iconfile': None,  # Voeg hier een .icns-bestand toe als je een app-icoon wilt
-    'packages': ['tkinter', 'datetime', 'openpyxl', 'selenium', 'pandas', 're', 'glob'],
-    'includes': ['xml.etree.ElementTree'],
-    'plist': {
-        'CFBundleName': 'Meldingen_per_gemeente',
-        'CFBundleShortVersionString': '1.0.0',
-        'CFBundleIdentifier': 'nl.Paul_Bron.meldingen_per_gemeente',
-        'NSHighResolutionCapable': True
-    }
-}
+jobs:
+  build-macos:
+    runs-on: macos-latest
 
-setup(
-    app=APP,
-    name='Meldingen_per_gemeente',
-    data_files=DATA_FILES,
-    options={'py2app': OPTIONS},
-    setup_requires=['py2app'],
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install py2app
 
+      - name: Build app with py2app
+        run: |
+          python setup.py py2app
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AHlauncher-macOS
+          path: dist/AHlauncher.app
