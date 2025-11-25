@@ -1,6 +1,6 @@
 from setuptools import setup
 
-APP = ['main_menu.py']  # jouw hoofdscript
+APP = ['main_menu.pyw']  # jouw hoofdscript
 OPTIONS = {
     'argv_emulation': True,
     'iconfile': 'Aziatische Hoornaar.icns',
