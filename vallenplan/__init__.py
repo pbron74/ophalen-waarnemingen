@@ -1,0 +1,1 @@
+from .vallenplan_logica import start_gui
