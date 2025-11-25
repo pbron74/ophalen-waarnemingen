@@ -1,4 +1,4 @@
-name: Build AHlauncher macOS App
+name: Build AHlauncher macOS App + DMG
 
 on:
   push:
@@ -22,13 +22,33 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install py2app
+          brew install create-dmg
 
       - name: Build AHlauncher.app
         run: |
           python setup.py py2app
 
-      - name: Upload artifact
+      - name: Create DMG
+        run: |
+          mkdir -p dmg
+          create-dmg \
+            --volname "AHlauncher Installer" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "AHlauncher.app" 200 200 \
+            --hide-extension "AHlauncher.app" \
+            "dmg/AHlauncher.dmg" \
+            "dist/AHlauncher.app"
+
+      - name: Upload .app artifact
         uses: actions/upload-artifact@v4
         with:
-          name: AHlauncher-macOS
+          name: AHlauncher-macOS-app
           path: dist/AHlauncher.app
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AHlauncher-macOS-dmg
+          path: dmg/AHlauncher.dmg
