@@ -3,7 +3,7 @@ from setuptools import setup
 APP = ['main_menu.py']  # jouw hoofdscript
 OPTIONS = {
     'argv_emulation': True,
-    'iconfile': 'icon.icns',
+    'iconfile': 'Aziatische Hoornaar.icns',
     'packages': [
         'tkinter',
         'logging',
