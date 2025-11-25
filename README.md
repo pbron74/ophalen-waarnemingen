@@ -31,6 +31,7 @@ Functionaliteiten:
         Vallen worden aangegeven met een straal van 70 m vanaf het nest en onderling
         Doublure nesten worden genegeerd.
         Er wordt een kaart gemaakt en geopend in je browser.
+
     Het menu ziet er zo uit:
     <img width="306" height="145" alt="afbeelding" src="https://github.com/user-attachments/assets/8131348c-cd00-4c27-95ce-81109e6dce3f" />
 
