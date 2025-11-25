@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -31,11 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: AHlauncher-macOS
-          path: dist/AHlauncher.appp
-        run: python3 setup_macos.py py2app
-
-      - name: Upload .app artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: meldingen_per_gemeente-macOS
-          path: dist/meldingen_per_gemeente.app
+          path: dist/AHlauncher.app
