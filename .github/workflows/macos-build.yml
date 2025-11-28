@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Clean old builds
+        run: rm -rf build dist dmg
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -27,6 +30,10 @@ jobs:
       - name: Build AHlauncher.app
         run: |
           python setup.py py2app
+
+      - name: Ensure data folder exists
+        run: |
+          mkdir -p dist/AHlauncher.app/Contents/Resources/data
 
       - name: Create DMG
         run: |
@@ -38,6 +45,7 @@ jobs:
             --icon-size 100 \
             --icon "AHlauncher.app" 200 200 \
             --hide-extension "AHlauncher.app" \
+            --app-drop-link 400 200 \
             "dmg/AHlauncher.dmg" \
             "dist/AHlauncher.app"
 
