@@ -1,0 +1,6 @@
+[2025-11-28 13:00:16] Aantal meldingen met GPS: 826
+[2025-11-28 13:00:16] Afstand berekend tussen eerste twee meldingen: 6055.5 meter
+[2025-11-28 13:00:30] Meldingen zonder cluster: 0
+[2025-11-28 13:00:30] Aantal meldingen met cluster: 826
+[2025-11-28 13:00:30] Totaal markers daadwerkelijk toegevoegd: 826
+[2025-11-28 13:00:31] ✅ Kaart opgeslagen als C:\Users\Paul Bron\Desktop\UtrechtWaarneming\clustering\data\aziatische_hoornaar_meldingen_Utrecht.html

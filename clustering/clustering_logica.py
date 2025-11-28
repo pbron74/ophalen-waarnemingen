@@ -8,39 +8,18 @@ import re
 import openpyxl
 from folium.plugins import FeatureGroupSubGroup, GroupedLayerControl,MarkerCluster
 import os, sys, datetime
-
-def get_data_dir():
-    if hasattr(sys, "_MEIPASS"):
-        base_dir = os.path.dirname(sys.executable)
-    else:
-        base_dir = os.path.dirname(__file__)
-    data_dir = os.path.join(base_dir, "data")
-    os.makedirs(data_dir, exist_ok=True)
-    return data_dir
+from config import DATA_DIR
 
 def log_debug(message):
-    data_dir = get_data_dir()
-    log_path = os.path.join(data_dir, "debug_log.txt")
+    log_path = os.path.join(DATA_DIR, "debug_log.txt")
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(log_path, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {message}\n")
 
-def get_base_dir():
-    # In een PyInstaller exe bestaat sys._MEIPASS
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.dirname(sys.executable)
-    else:
-        return os.path.dirname(__file__)
-
-# Zorg dat er altijd een data-map is
-base_dir = get_base_dir()
-data_dir = os.path.join(base_dir, "data")
-os.makedirs(data_dir, exist_ok=True)
-
 kleuren = [
     'red', 'blue', 'green', 'purple', 'orange', 'darkred', 'lightred',
-    'beige', 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple', 'yellow',
-    'pink', 'lightblue', 'lightgreen', 'gray', 'black', 'lightgray'
+    'beige', 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple',
+    'pink', 'lightblue', 'lightgreen', 'gray', 'black', 'lightgray', 'white'
 ]
 
 STRAAL_NEST_CLUSTER = 50  # meter
@@ -55,11 +34,17 @@ def extract_url(cell):
     match = re.search(r'"(https?://[^"]+)"', str(cell))
     return match.group(1) if match else None
 
-def lees_excel_met_links(filepath):
+def lees_excel_met_links(filename):
+    # Combineer bestandsnaam met centrale data map
+    filepath = os.path.join(DATA_DIR, filename)
+
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"❌ Bestand niet gevonden: {filepath}")
+
     df = pd.read_excel(filepath)
     wb = openpyxl.load_workbook(filepath, data_only=False)
     sheet = wb.active
-
+    
     header = [cell.value for cell in next(sheet.iter_rows(min_row=1, max_row=1))]
     if 'Link' not in header:
         df['link_url'] = None
@@ -309,42 +294,21 @@ def toon_meldingen(filepath, straal_koppeling):
     """
     m.get_root().html.add_child(folium.Element(periode_html))
 
-    # Bepaal basisdir (exe of script)
-    if hasattr(sys, "_MEIPASS"):
-        base_dir = os.path.dirname(sys.executable)
-    else:
-        base_dir = os.path.dirname(__file__)
-
-    # Zorg dat er een data-map is
-    data_dir = os.path.join(base_dir, "data")
-    os.makedirs(data_dir, exist_ok=True)
-
     # Opslaan
     bestandsnaam_input = os.path.basename(filepath)
     gemeente_naam = bestandsnaam_input.split('_')[0] if '_' in bestandsnaam_input else 'onbekend'
     gemeente_naam = gemeente_naam.replace(' ', '_')
     bestandsnaam_output = f"aziatische_hoornaar_meldingen_{gemeente_naam}.html"
 
-    map_path = os.path.join(data_dir, bestandsnaam_output)
+    map_path = os.path.join(DATA_DIR, bestandsnaam_output)
     try:
         m.save(map_path)
-        if 'log_debug' in globals():
-            log_debug(f"✅ Kaart opgeslagen als {map_path}")
-        else:
-            print(f"✅ Kaart opgeslagen als {map_path}")
+        log_debug(f"✅ Kaart opgeslagen als {map_path}")
+        return map_path   # ✅ geef pad terug aan GUI
     except Exception as e:
-        if 'log_debug' in globals():
-            log_debug(f"[ERROR] Kaart niet opgeslagen: {e}")
-        else:
-            print(f"[ERROR] Kaart niet opgeslagen: {e}")
+        log_debug(f"[ERROR] Kaart niet opgeslagen: {e}")
+        return None       # ✅ GUI kan dit checken en foutmelding tonen
 
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from tkinter import ttk
-
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from tkinter import ttk
 
 def selecteer_bestand_en_straal():
     root = tk.Toplevel()
@@ -371,6 +335,7 @@ def selecteer_bestand_en_straal():
 
     def kies_bestand():
         pad = filedialog.askopenfilename(
+            initialdir=DATA_DIR,   # ✅ start direct in centrale data-map
             title="Selecteer Excel-bestand",
             filetypes=[("Excel-bestanden", "*.xlsx *.xls")]
         )
@@ -416,8 +381,10 @@ def selecteer_bestand_en_straal():
         progress["value"] = 4
         root.update_idletasks()
 
+        map_path = toon_meldingen(filepath, straal_koppeling)
+
         voortgang_status.set("✅ Verwerking afgerond, kaart opgeslagen")
-        messagebox.showinfo("Klaar", "De kaart is succesvol opgeslagen.")
+        messagebox.showinfo("Kaart opgeslagen", f"De kaart is opgeslagen in:\n{map_path}")
         root.destroy()
 
     pad = {"padx": 10, "pady": 6}

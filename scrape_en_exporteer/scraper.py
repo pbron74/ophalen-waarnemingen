@@ -16,12 +16,13 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 from xml.etree.ElementTree import Element, SubElement, tostring, parse as etree_parse
 from xml.dom.minidom import parseString
+from config import DATA_DIR
 
 kleur_dict = {
-    "Individueel": "green",
+    "Individueel": "lightgreen",
     "Nest - niet geruimd": "red",
-    "Nest - geruimd": "orange",
-    "koningin": "gold"
+    "Nest - geruimd": "darkred",
+    "koningin": "orange"
 }
 
 gemeente_dict = {
@@ -224,35 +225,25 @@ def scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeen
         driver.quit()
         driver_detail.quit()
 
-
-    def get_data_folder():
-        # Dynamisch pad naar 'data' naast .pyw of .exe
-        base_dir = os.path.dirname(os.path.abspath(sys.executable if getattr(sys, 'frozen', False) else __file__))
-        map_pad = os.path.join(base_dir, "data")
-        os.makedirs(map_pad, exist_ok=True)
-        return map_pad
-
     def vind_excelbestand(gemeente):
-        map_pad = get_data_folder()
-        patroon = os.path.join(map_pad, f"{gemeente}_aziatische_hoornaar_*.xlsx")
+        patroon = os.path.join(DATA_DIR, f"{gemeente}_aziatische_hoornaar_*.xlsx")
         bestanden = glob.glob(patroon)
         if bestanden:
             bestanden.sort(key=os.path.getmtime, reverse=True)
             return bestanden[0]
         else:
             tijdstempel = datetime.now().strftime("%Y%m%d_%H%M")
-            return os.path.join(map_pad, f"{gemeente}_aziatische_hoornaar_{tijdstempel}.xlsx")
+            return os.path.join(DATA_DIR, f"{gemeente}_aziatische_hoornaar_{tijdstempel}.xlsx")
 
     def vind_kmlbestand(gemeente):
-        map_pad = get_data_folder()
-        patroon = os.path.join(map_pad, f"{gemeente}_aziatische_hoornaar_*.kml")
+        patroon = os.path.join(DATA_DIR, f"{gemeente}_aziatische_hoornaar_*.kml")
         bestanden = glob.glob(patroon)
         if bestanden:
             bestanden.sort(key=os.path.getmtime, reverse=True)
             return bestanden[0]
         else:
             tijdstempel = datetime.now().strftime("%Y%m%d_%H%M")
-            return os.path.join(map_pad, f"{gemeente}_aziatische_hoornaar_{tijdstempel}.kml")
+            return os.path.join(DATA_DIR, f"{gemeente}_aziatische_hoornaar_{tijdstempel}.kml")
 
     # 📁 Bestanden ophalen
     excel_pad = vind_excelbestand(gemeente)
@@ -352,6 +343,10 @@ def scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeen
 
             point = SubElement(placemark, 'Point')
             SubElement(point, 'coordinates').text = coord_str
+
+            # ✅ voeg key toe zodat doublures worden onthouden
+            bestaande_coords.add(key)
+
 
     kml_str = tostring(root, 'utf-8')
     kml_pretty = parseString(kml_str).toprettyxml(indent="  ")
