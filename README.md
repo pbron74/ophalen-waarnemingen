@@ -12,6 +12,15 @@ Volg deze stappen om AHlauncher op macOS te installeren:
 3. **Open het DMG-bestand**
    - Dubbelklik op `AHlauncher.dmg`.
    - Er verschijnt een venster met het AHlauncher‑icoon en een snelkoppeling naar de **Applications** map.
+   
++-----------------------------------------------------------+
+|                                                           |
+|   [ AHlauncher.app ]                                      |
+|                                                           |
+|                                                           |
+|                                   [ Applications alias ]  |
+|                                                           |
++-----------------------------------------------------------+
 
 4. **Installeer de app**
    - Sleep het **AHlauncher‑icoon** naar de **Applications** map.
