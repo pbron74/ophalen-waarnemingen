@@ -30,10 +30,21 @@ Volg deze stappen om AHlauncher op macOS te installeren:
    - Open de **Applications** map.
    - Dubbelklik op **AHlauncher** om de app te starten.
 ---
-### ℹ️ Extra tips
-- **Eerste keer openen:** macOS kan een waarschuwing geven (“app van onbekende ontwikkelaar”).  
-  Ga dan naar **Systeemvoorkeuren → Beveiliging en privacy → Open toch** om de app te starten.
-- **Verwijderen:** sleep AHlauncher gewoon uit de Applications map naar de prullenmand.
+🛠️ Troubleshooting (macOS)
+Soms kan macOS extra beveiligingsmeldingen geven bij het openen van apps die niet via de App Store zijn geïnstalleerd. Hieronder vind je de meest voorkomende situaties en oplossingen:
+❌ "App kan niet worden geopend omdat het van een niet‑erkende ontwikkelaar komt"
+   - Ga naar Systeeminstellingen → Privacy & Beveiliging.
+   - Scroll naar Beveiliging en klik op Open toch bij AHlauncher.
+   - Start de app opnieuw.
+❌ "App is beschadigd of kan niet worden geopend"
+   - Controleer of je de DMG correct hebt gekopieerd naar de Applications map.
+   - Verwijder oude versies van AHlauncher en installeer opnieuw.
+   - Zorg dat je macOS versie ≥ 12 draait (voor Python 3.11 compatibiliteit).
+❌ Geen schrijfrechten in de data‑map
+   - AHlauncher maakt standaard een data/ map in de bundel.
+   - Als die map read‑only is (bijv. in /Applications), wordt automatisch een fallback gemaakt naar:
+   ~/Documents/AHlauncher/data
+   - Controleer of deze map bestaat en schrijfbaar is.
 ---
 Met deze stappen heb je AHlauncher netjes geïnstalleerd op macOS 🎉.
 
