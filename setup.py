@@ -10,12 +10,22 @@ OPTIONS = {
         'clustering',
         'vallenplan',
         'scrape_en_exporteer'
-    ]
+    ],
+    'resources': ['config.py'],  # bundel config mee
+    'plist': {
+        'CFBundleName': 'AHlauncher',
+        'CFBundleShortVersionString': '0.1.0',
+        'CFBundleVersion': '0.1.0',
+        'CFBundleIdentifier': 'nl.paul.ahlauncher'
+    }
 }
 
 setup(
-    app=APP,
     name='AHlauncher',
+    version='0.1.0',
+    description='Clustering GUI launcher for ecological fieldwork',
+    author='Paul',
+    app=APP,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
 )
