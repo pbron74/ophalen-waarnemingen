@@ -1,8 +1,11 @@
+# main_menu.pyw
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime, timedelta
 import os
 import sys
+
+from config import DATA_DIR   # ✅ centrale data map
 
 # ✅ Veilige import van scraper
 try:
