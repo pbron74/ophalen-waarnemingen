@@ -8,7 +8,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('config.py', '.'),                # bundel config.py mee
-        ('data/*', 'data'),                # bundel data-map (leeg of gevuld)
+        #('data/*', 'data'),                # bundel data-map (leeg of gevuld)
         ('Aziatische Hoornaar.icns', '.'), # bundel macOS icoon
     ],
     hiddenimports=['tkinter', 'logging', 'clustering', 'vallenplan', 'scrape_en_exporteer'],
@@ -60,4 +60,5 @@ app = BUNDLE(
         'CFBundleVersion': '0.1.0',
         'CFBundleIdentifier': 'nl.paul.ahlauncher',
     }
+
 )
