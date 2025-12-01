@@ -31,7 +31,7 @@ jobs:
         run: mkdir -p data
 
       - name: Run scraper to prepare data
-        run: python -m scrape_en_exporteer/scraper.py || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
+        run: python -m scrape_en_exporteer.scraper || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
 
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller ahlauncher.spec
@@ -50,8 +50,8 @@ jobs:
 
       - name: Run AHlauncher.app with logging
         run: |
-          ./dist/AHlauncher.app/Contents/MacOS/AHlauncher > app.log 2>&1 &
-          sleep 5
+          ./dist/AHlauncher.app/Contents/MacOS/AHlauncher 2>&1 | tee app.log &
+          sleep 15
           echo "==== App log output (first 50 lines) ===="
           head -n 50 app.log || echo "Geen output gevonden"
 
