@@ -31,7 +31,7 @@ jobs:
         run: mkdir -p data
 
       - name: Run scraper to prepare data
-        run: python scrape_en_exporteer/scraper.py || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
+        run: python -m scrape_en_exporteer/scraper.py || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
 
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller ahlauncher.spec
