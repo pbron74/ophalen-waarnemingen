@@ -85,7 +85,8 @@ jobs:
           name: AHlauncher-macOS-dmg
           path: dmg/AHlauncher.dmg
 
-      - name: Upload app log
+      - name: Upload app log artifact
+        if: always() # zorgt dat het ook gebeurt als er fouten zijn
         uses: actions/upload-artifact@v4
         with:
           name: AHlauncher-log
