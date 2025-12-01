@@ -31,7 +31,7 @@ jobs:
         run: mkdir -p data
 
       - name: Run scraper to prepare data
-        run: python scrape_en_exporteer.py || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
+        run: python scrape_en_exporteer/scraper.py || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
 
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller ahlauncher.spec
@@ -57,7 +57,7 @@ jobs:
 
       - name: Verify bundled modules
         run: |
-          python -c "import scrape_en_exporteer, clustering, vallenplan; print('✅ modules aanwezig')"
+          python -c "import scrape_en_exporteer.scraper, clustering, vallenplan; print('✅ modules aanwezig')"
 
       - name: Create DMG
         run: |
@@ -90,6 +90,3 @@ jobs:
         with:
           name: AHlauncher-log
           path: app.log
-        with:
-          name: AHlauncher-macOS-dmg
-          path: dmg/AHlauncher.dmg
