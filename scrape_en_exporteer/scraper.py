@@ -34,7 +34,7 @@ def start_browser():
 
     try:
         # Probeer Chrome
-        driver_path = ChromeDriverManager(path=wdm_cache).install()
+        driver_path = ChromeDriverManager().install()
         service = ChromeService(driver_path)
 
         options = ChromeOptions()
@@ -392,5 +392,6 @@ if __name__ == "__main__":
     startdatum = einddatum - timedelta(weeks=2)
     maandnaam = startdatum.strftime("%B")
     jaar = startdatum.year
+
 
     scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeente_code)
