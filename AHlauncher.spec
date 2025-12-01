@@ -3,15 +3,22 @@
 block_cipher = None
 
 a = Analysis(
-    ['main_menu.pyw'],   # jouw hoofdscript
+    ['main_menu.pyw'],   # hoofdscript
     pathex=[],
     binaries=[],
     datas=[
         ('config.py', '.'),                # bundel config.py mee
-        #('data/*', 'data'),                # bundel data-map (leeg of gevuld)
         ('Aziatische Hoornaar.icns', '.'), # bundel macOS icoon
+        # Als je later data-bestanden toevoegt, zet ze hier:
+        # ('data/*', 'data'),
     ],
-    hiddenimports=['tkinter', 'logging', 'clustering', 'vallenplan', 'scrape_en_exporteer'],
+    hiddenimports=[
+        'tkinter',
+        'logging',
+        'scrape_en_exporteer',
+        'clustering',
+        'vallenplan',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -60,5 +67,4 @@ app = BUNDLE(
         'CFBundleVersion': '0.1.0',
         'CFBundleIdentifier': 'nl.paul.ahlauncher',
     }
-
 )
