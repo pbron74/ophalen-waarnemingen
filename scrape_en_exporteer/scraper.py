@@ -10,7 +10,7 @@ import os, glob
 import re
 import time
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from openpyxl import load_workbook
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
@@ -363,5 +363,6 @@ if __name__ == "__main__":
     startdatum = einddatum - timedelta(weeks=2)
     maandnaam = startdatum.strftime("%B")
     jaar = startdatum.year
+
 
     scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeente_code)
