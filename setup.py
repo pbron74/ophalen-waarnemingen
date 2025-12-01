@@ -9,7 +9,7 @@ OPTIONS = {
         'logging',
         'clustering',
         'vallenplan',
-        'scrape_en_exporteer'
+        'scrape_en_exporteer.scraper'
     ],
     'resources': ['config.py'],  # bundel config mee
     'plist': {
