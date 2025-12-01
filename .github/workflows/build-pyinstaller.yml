@@ -27,23 +27,24 @@ jobs:
           pip install pyinstaller
           brew install create-dmg
 
-      - name: Build AHlauncher.app with PyInstaller spec
-        run: |
-          pyinstaller ahlauncher.spec
-
       - name: Ensure data folder exists
+        run: mkdir -p data
+
+      - name: Build AHlauncher.app with PyInstaller spec
+        run: pyinstaller ahlauncher.spec
+
+      - name: Verify build output
         run: |
-          mkdir -p dist/AHlauncher.app/Contents/Resources/data
-          
+          echo "Contents of dist/:"
+          ls dist
+          test -d dist/AHlauncher.app || (echo "Build failed: AHlauncher.app not found" && exit 1)
+
       - name: Test AHlauncher.app startup
         run: |
-          list dir
-          # Start de app in de achtergrond en wacht kort
-          open -a dist/AHlauncher.app || exit 1
+          open dist/AHlauncher.app || exit 1
           sleep 5
-          # Controleer of het proces draait
           pgrep -f AHlauncher && echo "App started successfully" || (echo "App failed to start" && exit 1)
-          
+
       - name: Create DMG
         run: |
           mkdir -p dmg
