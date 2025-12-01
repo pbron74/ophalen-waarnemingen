@@ -37,6 +37,7 @@ jobs:
           
       - name: Test AHlauncher.app startup
         run: |
+          list dir
           # Start de app in de achtergrond en wacht kort
           open -a dist/AHlauncher.app || exit 1
           sleep 5
