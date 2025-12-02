@@ -20,7 +20,13 @@ import logging
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.safari.webdriver import WebDriver as SafariDriver
+import json, os
+from config import DATA_DIR
 
+gemeenten_path = os.path.join(DATA_DIR, "gemeenten.json")
+with open(gemeenten_path, encoding="utf-8") as f:
+    gemeente_dict = json.load(f)
+    
 logging.basicConfig(
     filename="app.log",
     level=logging.INFO,
@@ -374,5 +380,6 @@ if __name__ == "__main__":
     startdatum = einddatum - timedelta(weeks=2)
     maandnaam = startdatum.strftime("%B")
     jaar = startdatum.year
+
 
     scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeente_code)
