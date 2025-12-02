@@ -10,7 +10,7 @@ a = Analysis(
         ('config.py', '.'),                # bundel config.py mee
         ('Aziatische Hoornaar.icns', '.'), # bundel macOS icoon
         # Als je later data-bestanden toevoegt, zet ze hier:
-        # ('data/*', 'data'),
+        ('data/*', 'data'),
     ],
     hiddenimports=[
         'tkinter',
@@ -68,3 +68,4 @@ app = BUNDLE(
         'CFBundleIdentifier': 'nl.paul.ahlauncher',
     }
 )
+
