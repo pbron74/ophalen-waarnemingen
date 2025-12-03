@@ -34,7 +34,7 @@ jobs:
         run: python -m scrape_en_exporteer.scraper || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
 
       - name: Show spec file
-        run: cat ahlauncher.spec
+        run: cat AHlauncher.spec
 
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller ahlauncher.spec
