@@ -3,17 +3,12 @@
 block_cipher = None
 
 a = Analysis(
-    ['main_menu.pyw'],   # hoofdscript
+    ['main_menu.pyw'],
     pathex=[],
     binaries=[],
     datas=[
-        # Bundel config.py mee (optioneel, meestal niet nodig omdat het al in de exe zit)
         ('config.py', '.'),
-
-        # macOS icoon
         ('Aziatische Hoornaar.icns', '.'),
-
-        # Gemeenten.json expliciet in Resources/data
         ('data/gemeenten.json', 'Resources/data'),
     ],
     hiddenimports=[
@@ -56,4 +51,11 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='AHlauncher'
+)
+
+app = BUNDLE(
+    coll,
+    name='AHlauncher.app',
+    icon='Aziatische Hoornaar.icns',
+    bundle_identifier='nl.ahlauncher.app'
 )
