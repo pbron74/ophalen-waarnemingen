@@ -37,7 +37,7 @@ jobs:
         run: cat AHlauncher.spec
 
       - name: Build AHlauncher.app with PyInstaller spec
-        run: pyinstaller ahlauncher.spec
+        run: pyinstaller AHlauncher.spec
 
       - name: Verify PyInstaller built a bundle
         run: |
