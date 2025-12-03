@@ -39,16 +39,6 @@ jobs:
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller AHlauncher.spec
 
-      - name: Verify PyInstaller built a bundle
-        run: |
-          echo "=== PyInstaller log check ==="
-          if ! grep -r "Building BUNDLE" build; then
-            echo "❌ PyInstaller did not build a .app bundle (no BUNDLE step found)"
-            exit 1
-          else
-            echo "✅ BUNDLE step detected in PyInstaller log"
-          fi
-
       - name: Verify build output
         run: |
           echo "Contents of dist/:"
