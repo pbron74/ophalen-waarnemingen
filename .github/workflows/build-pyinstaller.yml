@@ -41,6 +41,9 @@ jobs:
           echo "Contents of dist/:"
           ls dist
           test -d dist/AHlauncher.app || (echo "Build failed: AHlauncher.app not found" && exit 1)
+      
+      - name: Verify data files
+        run: ls dist/AHlauncher.app/Contents/MacOS/data
 
       - name: Test AHlauncher.app startup
         run: |
