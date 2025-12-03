@@ -41,15 +41,15 @@ jobs:
           echo "Contents of dist/:"
           ls dist
           test -d dist/AHlauncher.app || (echo "Build failed: AHlauncher.app not found" && exit 1)
-      
+
       - name: Verify data files
         run: ls dist/AHlauncher.app/Contents/Resources/data
 
-      - name: Test AHlauncher.app startup
+      - name: Test AHlauncher.app startup (direct binary)
         run: |
-          open dist/AHlauncher.app || exit 1
+          ./dist/AHlauncher.app/Contents/MacOS/AHlauncher & 
           sleep 5
-          pgrep -f AHlauncher && echo "App started successfully" || (echo "App failed to start" && exit 1)
+          pgrep -f AHlauncher && echo "✅ App started successfully" || (echo "❌ App failed to start" && exit 1)
 
       - name: Run AHlauncher.app with logging
         run: |
@@ -58,7 +58,7 @@ jobs:
           echo "==== App log output (first 50 lines) ===="
           head -n 50 app.log || echo "Geen output gevonden"
 
-      - name: Verify bundled modules
+      - name: Verify bundled modules (sanity check)
         run: |
           python -c "import scrape_en_exporteer.scraper, clustering, vallenplan; print('✅ modules aanwezig')"
 
@@ -89,7 +89,7 @@ jobs:
           path: dmg/AHlauncher.dmg
 
       - name: Upload app log artifact
-        if: always() # zorgt dat het ook gebeurt als er fouten zijn
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: AHlauncher-log
