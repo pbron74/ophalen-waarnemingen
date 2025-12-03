@@ -1,22 +1,22 @@
-import os
-import sys
+# config.py
+import os, sys
 
 def get_data_folder():
     """
     Bepaal een schrijfbare data-map voor AHlauncher.
     Werkt zowel in development als in gebundelde macOS/Windows builds.
     """
-    if getattr(sys, 'frozen', False):
-        # PyInstaller bundel
-        base_dir = os.path.dirname(sys.executable)
-    elif hasattr(sys, '_MEIPASS'):
-        # PyInstaller tijdelijke map
+    if hasattr(sys, '_MEIPASS'):
+        # ✅ PyInstaller runtime map (_internal)
         base_dir = sys._MEIPASS
+    elif getattr(sys, 'frozen', False):
+        # Gebundelde executable zonder _MEIPASS
+        base_dir = os.path.dirname(sys.executable)
     else:
-        # py2app bundel of gewone Python run
+        # Gewone Python run of py2app
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Standaard data-map naast script/exe
+    # Standaard data-map naast script/_MEIPASS
     map_pad = os.path.join(base_dir, "data")
 
     try:
