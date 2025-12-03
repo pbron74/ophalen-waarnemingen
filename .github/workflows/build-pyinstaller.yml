@@ -33,21 +33,39 @@ jobs:
       - name: Run scraper to prepare data
         run: python -m scrape_en_exporteer.scraper || echo "⚠️ scraper kon niet draaien, ga verder zonder CSV"
 
+      - name: Show spec file
+        run: cat ahlauncher.spec
+
       - name: Build AHlauncher.app with PyInstaller spec
         run: pyinstaller ahlauncher.spec
+
+      - name: Verify PyInstaller built a bundle
+        run: |
+          echo "=== PyInstaller log check ==="
+          if ! grep -r "Building BUNDLE" build; then
+            echo "❌ PyInstaller did not build a .app bundle (no BUNDLE step found)"
+            exit 1
+          else
+            echo "✅ BUNDLE step detected in PyInstaller log"
+          fi
 
       - name: Verify build output
         run: |
           echo "Contents of dist/:"
-          ls dist
-          test -d dist/AHlauncher.app || (echo "Build failed: AHlauncher.app not found" && exit 1)
+          ls -R dist
+          if [ -d "dist/AHlauncher.app" ]; then
+            echo "✅ Found AHlauncher.app bundle"
+          else
+            echo "❌ Build failed: AHlauncher.app not found"
+            exit 1
+          fi
 
       - name: Verify data files
         run: ls dist/AHlauncher.app/Contents/Resources/data
 
       - name: Test AHlauncher.app startup (direct binary)
         run: |
-          ./dist/AHlauncher.app/Contents/MacOS/AHlauncher & 
+          ./dist/AHlauncher.app/Contents/MacOS/AHlauncher &
           sleep 5
           pgrep -f AHlauncher && echo "✅ App started successfully" || (echo "❌ App failed to start" && exit 1)
 
@@ -94,3 +112,10 @@ jobs:
         with:
           name: AHlauncher-log
           path: app.log
+
+      - name: Upload fallback folder artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AHlauncher-macOS-folder
+          path: dist/AHlauncher
