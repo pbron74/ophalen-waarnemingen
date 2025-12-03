@@ -7,10 +7,14 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('config.py', '.'),                # bundel config.py mee
-        ('Aziatische Hoornaar.icns', '.'), # bundel macOS icoon
-        # Als je later data-bestanden toevoegt, zet ze hier:
-        ('data/gemeenten.json', 'data'),
+        # Bundel config.py mee (optioneel, meestal niet nodig omdat het al in de exe zit)
+        ('config.py', '.'),
+
+        # macOS icoon
+        ('Aziatische Hoornaar.icns', '.'),
+
+        # Gemeenten.json expliciet in Resources/data
+        ('data/gemeenten.json', 'Resources/data'),
     ],
     hiddenimports=[
         'tkinter',
@@ -20,13 +24,11 @@ a = Analysis(
         'vallenplan',
     ],
     hookspath=[],
-    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
-    noarchive=False,
 )
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
@@ -41,7 +43,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,   # False = GUI-only, geen terminalvenster
+    console=False,  # windowed
     icon='Aziatische Hoornaar.icns'
 )
 
@@ -55,18 +57,3 @@ coll = COLLECT(
     upx_exclude=[],
     name='AHlauncher'
 )
-
-app = BUNDLE(
-    coll,
-    name='AHlauncher.app',
-    icon='Aziatische Hoornaar.icns',
-    bundle_identifier='nl.paul.ahlauncher',
-    info_plist={
-        'CFBundleName': 'AHlauncher',
-        'CFBundleShortVersionString': '0.1.0',
-        'CFBundleVersion': '0.1.0',
-        'CFBundleIdentifier': 'nl.paul.ahlauncher',
-    }
-)
-
-
