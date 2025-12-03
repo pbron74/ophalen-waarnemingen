@@ -10,7 +10,7 @@ a = Analysis(
         ('data/gemeenten.json', 'data'),
         ('Aziatische Hoornaar.icns', '.'),
         ('config.py', '.'),
-    ]
+    ],
     hiddenimports=[
         'tkinter',
         'logging',
@@ -59,5 +59,6 @@ app = BUNDLE(
     icon='Aziatische Hoornaar.icns',
     bundle_identifier='nl.ahlauncher.app'
 )
+
 
 
