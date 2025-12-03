@@ -43,7 +43,7 @@ jobs:
           test -d dist/AHlauncher.app || (echo "Build failed: AHlauncher.app not found" && exit 1)
       
       - name: Verify data files
-        run: ls dist/AHlauncher.app/Contents/MacOS/_internal/data
+        run: ls dist/AHlauncher.app/Contents/Resources/data
 
       - name: Test AHlauncher.app startup
         run: |
