@@ -1,8 +1,6 @@
 name: Build AHlauncher macOS App + DMG (PyInstaller)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -69,7 +67,22 @@ jobs:
       - name: Verify bundled modules (sanity check)
         run: |
           python -c "import scrape_en_exporteer.scraper, clustering, vallenplan; print('✅ modules aanwezig')"
+      
+      - name: Simuleer Finder-start (CWD=/)
+        run: |
+          cd /
+          python $GITHUB_WORKSPACE/main_menu.pyw 2>&1 | tee finder.log
+          echo "==== Finder-simulatie output (eerste 30 regels) ===="
+          head -n 30 finder.log
+          grep -q "gemeenten geladen" finder.log && echo "✅ Finder-simulatie geslaagd" || (echo "❌ gemeenten.json niet gevonden" && exit 1)
 
+      - name: Upload Finder-simulatie log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: AHlauncher-finder-log
+          path: finder.log
+      
       - name: Create DMG
         run: |
           mkdir -p dmg
