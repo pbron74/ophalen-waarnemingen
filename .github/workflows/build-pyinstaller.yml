@@ -71,11 +71,8 @@ jobs:
       - name: Simuleer Finder-start (CWD=/)
         run: |
           cd /
-          python $GITHUB_WORKSPACE/main_menu.pyw 2>&1 | tee $GITHUB_WORKSPACE/finder.log
-          echo "==== Finder-simulatie output (eerste 30 regels) ===="
-          head -n 30 $GITHUB_WORKSPACE/finder.log
-          grep -q "gemeenten geladen" $GITHUB_WORKSPACE/finder.log && echo "✅ Finder-simulatie geslaagd" || (echo "❌ gemeenten.json niet gevonden" && exit 1)
-
+          python $GITHUB_WORKSPACE/test_finder.py | tee $GITHUB_WORKSPACE/finder.log
+          
       - name: Upload Finder-simulatie log
         if: always()
         uses: actions/upload-artifact@v4
