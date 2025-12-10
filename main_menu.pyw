@@ -4,14 +4,17 @@ from tkinter import ttk
 from datetime import datetime, timedelta
 import os
 import sys
+from config import GEMEENTEN_FILE, DATA_DIR   # ✅ GEMEENTEN_FILE voor lezen, DATA_DIR voor schrijven
+from scrape_en_exporteer.scraper import scrape_en_exporteer
+import json
 
-from config import DATA_DIR   # ✅ centrale data map
-
-# ✅ Veilige import van scraper
+# ✅ Gemeenten laden uit JSON (statisch resource-bestand)
 try:
-    from scrape_en_exporteer.scraper import scrape_en_exporteer, gemeente_dict
+    with open(GEMEENTEN_FILE, "r", encoding="utf-8") as f:
+        gemeente_dict = json.load(f)
+    print(f"✅ {len(gemeente_dict)} gemeenten geladen uit JSON")
 except Exception as e:
-    print(f"❌ Fout bij importeren van scraper: {e}")
+    print(f"❌ Fout bij laden van gemeenten.json: {e}")
     gemeente_dict = {}
 
 # ✅ Directe imports van clustering en vallenplan
@@ -113,4 +116,5 @@ def start_gui():
 
 # 🚀 Entry point
 if __name__ == "__main__":
+
     start_gui()
