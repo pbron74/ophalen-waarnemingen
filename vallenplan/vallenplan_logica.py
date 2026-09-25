@@ -251,7 +251,9 @@ def maak_kaart(nesten_df, afstand, excel_pad, datum_juli_str, datum_sep_str):
 
 def maak_kml_per_gemeente(nesten_df, afstand, excel_pad, icoon_pad):
     if "Gemeente" not in nesten_df.columns:
-        raise ValueError("Kolom 'Gemeente' ontbreekt in de dataset.")
+        raise ValueError(
+            "Kolom 'Gemeente' ontbreekt in de dataset. Maar plan wordt gemaakt."
+        )
 
     icoon_bestandsnaam = os.path.basename(icoon_pad)
     kmz_paden = []
