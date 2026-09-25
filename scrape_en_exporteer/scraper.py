@@ -171,7 +171,7 @@ def scrape_en_exporteer(
                     omschrijving = cols[2].text.strip().lower()
                     is_nest = "nest" in omschrijving
                     in_collectie = "collectie" in omschrijving
-                    is_koningin = "koningin" in omschrijving
+                    is_koningin = "koningin" in omschrijving.lower()
 
                     waarneming_type = (
                         "Nest - geruimd"
@@ -208,9 +208,9 @@ def scrape_en_exporteer(
                             if is_nest:
                                 # Schrijf 0/1 in plaats van True/False
                                 doublure_status = (
-                                    "WAAR"
+                                    "=WAAR()"
                                     if is_doublure(gps_raw, bekende_coords)
-                                    else "ONWAAR"
+                                    else "=ONWAAR()"
                                 )
                         except Exception as e:
                             print(f"⚠️ GPS niet gevonden voor {waarneming_id}: {e}")
