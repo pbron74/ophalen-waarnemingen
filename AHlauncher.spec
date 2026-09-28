@@ -8,7 +8,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('data/gemeenten.json', 'data'),
-        ('Aziatische Hoornaar.icns', '.'),
+        ('Aziatische Hoornaar.ico', '.'),
         ('config.py', '.'),
     ],
     hiddenimports=[
@@ -39,7 +39,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,  # windowed
-    icon='Aziatische Hoornaar.icns'
+    icon='Aziatische Hoornaar.ico'
 )
 
 coll = COLLECT(
@@ -52,13 +52,3 @@ coll = COLLECT(
     upx_exclude=[],
     name='AHlauncher'
 )
-
-app = BUNDLE(
-    coll,
-    name='AHlauncher.app',
-    icon='Aziatische Hoornaar.icns',
-    bundle_identifier='nl.ahlauncher.app'
-)
-
-
-
