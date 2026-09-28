@@ -42,7 +42,3 @@ jobs:
       with:
         name: AHlauncher-Windows
         path: dist/AHlauncher
-
-        with:
-          name: AHlauncher-macOS-folder
-          path: dist/AHlauncher
