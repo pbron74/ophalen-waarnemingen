@@ -45,7 +45,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,
-    icon='Aziatische Hoornaar.ico'
+    icon='AziatischeHoornaar.ico'
 )
 
 coll = COLLECT(
