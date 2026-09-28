@@ -13,7 +13,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('data/gemeenten.json', 'data'),
-        ('Aziatische Hoornaar.ico', '.'),
+        ('AziatischeHoornaar.ico', '.'),
         ('config.py', '.'),
         (selenium_path, 'selenium'),
     ],
