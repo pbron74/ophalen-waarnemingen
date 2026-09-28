@@ -1,6 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+import selenium
+
 block_cipher = None
+
+selenium_path = os.path.dirname(selenium.__file__)
 
 a = Analysis(
     ['main_menu.pyw'],
@@ -10,6 +15,7 @@ a = Analysis(
         ('data/gemeenten.json', 'data'),
         ('Aziatische Hoornaar.ico', '.'),
         ('config.py', '.'),
+        (selenium_path, 'selenium'),
     ],
     hiddenimports=[
         'tkinter',
@@ -38,7 +44,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,  # windowed
+    console=False,
     icon='Aziatische Hoornaar.ico'
 )
 
@@ -52,3 +58,4 @@ coll = COLLECT(
     upx_exclude=[],
     name='AHlauncher'
 )
+
