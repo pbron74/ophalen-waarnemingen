@@ -1,44 +1,41 @@
-# config.py
 import os
 import sys
 
 def resource_path(relative_path: str) -> str:
     """
-    Geeft het absolute pad naar een resource in de PyInstaller bundel.
-    Werkt zowel via Finder als via Terminal.
+    Geeft het absolute pad naar een resource in een PyInstaller bundel.
+    Werkt op Windows, macOS en tijdens development.
     """
-    if getattr(sys, 'frozen', False):
-        # macOS app-bundle: Resources directory
-        base_dir = os.path.dirname(sys.executable)
-        resources_dir = os.path.abspath(os.path.join(base_dir, '..', 'Resources'))
-        return os.path.join(resources_dir, relative_path)
-    else:
-        # Normale Python run → map naast dit bestand
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        return os.path.join(base_dir, relative_path)
+    # PyInstaller bundel
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+
+    # Normale Python run
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_dir, relative_path)
+
 
 def get_data_folder() -> str:
     """
     Map voor schrijfbare data.
-    Probeert eerst Resources/data, valt terug naar Documents als dat read-only is.
+    In PyInstaller: gebruik lokale data-map naast de EXE.
+    In development: gebruik ./data
     """
-    if getattr(sys, 'frozen', False):
-        base_dir = os.path.dirname(sys.executable)
-        resources_dir = os.path.abspath(os.path.join(base_dir, '..', 'Resources'))
-        map_pad = os.path.join(resources_dir, 'data')
-    else:
-        map_pad = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+    if hasattr(sys, '_MEIPASS'):
+        # Schrijfbare map naast de EXE
+        exe_dir = os.path.dirname(sys.executable)
+        data_dir = os.path.join(exe_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        return data_dir
 
-    # Als Resources/data niet schrijfbaar is → fallback naar Documents
-    if not os.access(map_pad, os.W_OK):
-        home = os.path.expanduser("~")
-        map_pad = os.path.join(home, "Documents", "AHlauncher", "data")
-        os.makedirs(map_pad, exist_ok=True)
+    # Development mode
+    data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+    os.makedirs(data_dir, exist_ok=True)
+    return data_dir
 
-    return map_pad
 
-# ✅ Gebruik voor lezen van gemeenten.json
+# JSON-bestand lezen
 GEMEENTEN_FILE = resource_path('data/gemeenten.json')
 
-# ✅ Gebruik voor schrijven van nieuwe bestanden
+# Schrijfbare map
 DATA_DIR = get_data_folder()
