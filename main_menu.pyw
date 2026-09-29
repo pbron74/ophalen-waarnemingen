@@ -20,8 +20,17 @@ except Exception as e:
 # ✅ Directe imports van clustering en vallenplan
 try:
     from clustering.clustering_logica import selecteer_bestand_en_straal
-except Exception as e:
-    print(f"❌ Fout bij importeren clustering_logica: {e}")
+except Exception:
+    import traceback
+    from tkinter import messagebox
+
+    fout = traceback.format_exc()
+
+    messagebox.showerror(
+        "Importfout clustering",
+        fout
+    )
+
     selecteer_bestand_en_straal = None
 
 try:
