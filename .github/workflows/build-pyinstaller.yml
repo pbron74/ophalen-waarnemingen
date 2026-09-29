@@ -10,30 +10,84 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: "3.11"
 
     - name: Install Google Chrome
       run: |
         winget install Google.Chrome --accept-source-agreements --accept-package-agreements
 
-    - name: Install Python dependencies
+    - name: Upgrade pip
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller selenium webdriver-manager pandas openpyxl requests
+
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+        pip install selenium webdriver-manager
+        pip install pandas numpy
+        pip install openpyxl
+        pip install requests
+        pip install folium
+        pip install geopy
+
+    - name: Show package versions
+      run: |
+        pip show pandas
+        pip show numpy
+        pip show folium
+        pip show geopy
+
+    - name: Test scraper import
+      run: |
+        python -c "from scrape_en_exporteer.scraper import scrape_en_exporteer; print('SCRAPER OK')"
+
+    - name: Test clustering import
+      run: |
+        python -c "from clustering.clustering_logica import selecteer_bestand_en_straal; print('CLUSTERING OK')"
+
+    - name: Test vallenplan import
+      run: |
+        python -c "from vallenplan.vallenplan_logica import start_gui; print('VALLENPLAN OK')"
 
     - name: Build Windows EXE
       run: |
         pyinstaller AHlauncher.spec
+
+    - name: Verify EXE exists
+      shell: powershell
+      run: |
+        if (!(Test-Path "dist/AHlauncher/AHlauncher.exe")) {
+          throw "AHlauncher.exe niet gevonden"
+        }
+        Write-Host "AHlauncher.exe gevonden"
+
+    - name: Smoke test executable
+      shell: powershell
+      run: |
+        $proc = Start-Process `
+          -FilePath "dist/AHlauncher/AHlauncher.exe" `
+          -PassThru
+
+        Start-Sleep -Seconds 15
+
+        if ($proc.HasExited) {
+          Write-Host "EXE beëindigd met exitcode $($proc.ExitCode)"
+          exit 1
+        }
+
+        Write-Host "EXE draait succesvol"
+
+        Stop-Process -Id $proc.Id -Force
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: AHlauncher-Windows
         path: dist/AHlauncher
-
