@@ -1,120 +1,93 @@
-# main_menu.pyw
-import tkinter as tk
-from tkinter import ttk
-from datetime import datetime, timedelta
-import os
-import sys
-from config import GEMEENTEN_FILE, DATA_DIR   # ✅ GEMEENTEN_FILE voor lezen, DATA_DIR voor schrijven
-from scrape_en_exporteer.scraper import scrape_en_exporteer
-import json
+name: Build Windows EXE
 
-# ✅ Gemeenten laden uit JSON (statisch resource-bestand)
-try:
-    with open(GEMEENTEN_FILE, "r", encoding="utf-8") as f:
-        gemeente_dict = json.load(f)
-    print(f"✅ {len(gemeente_dict)} gemeenten geladen uit JSON")
-except Exception as e:
-    print(f"❌ Fout bij laden van gemeenten.json: {e}")
-    gemeente_dict = {}
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-# ✅ Directe imports van clustering en vallenplan
-try:
-    from clustering.clustering_logica import selecteer_bestand_en_straal
-except Exception as e:
-    print(f"❌ Fout bij importeren clustering_logica: {e}")
-    selecteer_bestand_en_straal = None
+jobs:
+  build:
+    runs-on: windows-latest
 
-try:
-    from vallenplan.vallenplan_logica import start_gui as start_vallenplan_gui
-except Exception as e:
-    print(f"❌ Fout bij importeren vallenplan: {e}")
-    start_vallenplan_gui = None
+    steps:
 
-# 🧠 Start clustering direct
-def start_clustering():
-    if selecteer_bestand_en_straal is None:
-        status_var.set("❌ Clustering module niet beschikbaar.")
-        return
-    try:
-        selecteer_bestand_en_straal()
-        status_var.set("✅ Clustering gestart")
-    except Exception as e:
-        status_var.set(f"❌ Fout bij clustering: {e}")
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-# 🧠 Start vallenplan direct
-def start_vallenplan():
-    if start_vallenplan_gui is None:
-        status_var.set("❌ Vallenplan module niet beschikbaar.")
-        return
-    try:
-        start_vallenplan_gui()
-        status_var.set("✅ Vallenplan gestart")
-    except Exception as e:
-        status_var.set(f"❌ Fout bij vallenplan: {e}")
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
 
-# 🐝 Scrapingfunctie
-def start_scraping():
-    gemeente = gemeente_var.get()
-    weken_str = weken_var.get()
+    - name: Install Google Chrome
+      run: |
+        winget install Google.Chrome --accept-source-agreements --accept-package-agreements
 
-    if not gemeente:
-        status_var.set("❌ Kies een gemeente.")
-        return
+    - name: Upgrade pip
+      run: |
+        python -m pip install --upgrade pip
 
-    gemeente_code = gemeente_dict.get(gemeente)
-    if not gemeente_code:
-        status_var.set("❌ Gemeentecode niet gevonden.")
-        return
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+        pip install selenium webdriver-manager
+        pip install pandas numpy
+        pip install openpyxl
+        pip install requests
+        pip install folium
+        pip install geopy
 
-    try:
-        aantal_weken = int(weken_str)
-        einddatum = datetime.today()
-        startdatum = einddatum - timedelta(weeks=aantal_weken)
-    except Exception as e:
-        status_var.set(f"❌ Ongeldige invoer: {e}")
-        return
+    - name: Show package versions
+      run: |
+        pip show pandas
+        pip show numpy
+        pip show folium
+        pip show geopy
 
-    maandnaam = startdatum.strftime("%B")
-    jaar = startdatum.year
+    - name: Test scraper import
+      run: |
+        python -c "from scrape_en_exporteer.scraper import scrape_en_exporteer; print('SCRAPER OK')"
 
-    status_var.set(f"⏳ Ophalen voor {gemeente} ({aantal_weken} weken terug)...")
-    root.update_idletasks()
+    - name: Test clustering import
+      run: |
+        python -c "from clustering.clustering_logica import selecteer_bestand_en_straal; print('CLUSTERING OK')"
 
-    try:
-        scrape_en_exporteer(startdatum, einddatum, maandnaam, jaar, gemeente, gemeente_code)
-        status_var.set(f"✅ Klaar: bestanden opgeslagen voor {gemeente}")
-    except Exception as e:
-        status_var.set(f"❌ Fout tijdens scraping: {e}")
+    - name: Test vallenplan import
+      run: |
+        python -c "from vallenplan.vallenplan_logica import start_gui; print('VALLENPLAN OK')"
 
-# 🖼️ GUI opbouw
-def start_gui():
-    global root, gemeente_var, weken_var, status_var
+    - name: Build Windows EXE
+      run: |
+        pyinstaller AHlauncher.spec
 
-    root = tk.Tk()
-    root.title("Aziatische hoornaar hoofdmenu")
+    - name: Verify EXE exists
+      shell: powershell
+      run: |
+        if (!(Test-Path "dist/AHlauncher/AHlauncher.exe")) {
+          throw "AHlauncher.exe niet gevonden"
+        }
+        Write-Host "AHlauncher.exe gevonden"
 
-    gemeente_var = tk.StringVar()
-    weken_var = tk.StringVar(value="2")
-    status_var = tk.StringVar()
+    - name: Smoke test executable
+      shell: powershell
+      run: |
+        $proc = Start-Process `
+          -FilePath "dist/AHlauncher/AHlauncher.exe" `
+          -PassThru
 
-    ttk.Label(root, text="Gemeente:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
-    gemeente_menu = ttk.Combobox(root, textvariable=gemeente_var, values=list(gemeente_dict.keys()), width=30)
-    gemeente_menu.grid(row=0, column=1, padx=10, pady=5)
-    if "Utrecht" in gemeente_dict:
-        gemeente_menu.set("Utrecht")
+        Start-Sleep -Seconds 15
 
-    ttk.Label(root, text="Aantal weken terug vanaf vandaag:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
-    ttk.Entry(root, textvariable=weken_var, width=5).grid(row=1, column=1, padx=10, pady=5, sticky="w")
+        if ($proc.HasExited) {
+          Write-Host "EXE beëindigd met exitcode $($proc.ExitCode)"
+          exit 1
+        }
 
-    ttk.Button(root, text="Start scraping", command=start_scraping).grid(row=2, column=0, columnspan=2, pady=10)
-    ttk.Label(root, textvariable=status_var, foreground="blue").grid(row=3, column=0, columnspan=2, pady=5)
+        Write-Host "EXE draait succesvol"
 
-    ttk.Button(root, text="🧠 Start clustering", command=start_clustering).grid(row=4, column=0, columnspan=2, pady=5)
-    ttk.Button(root, text="🪤 Genereer vallenplan", command=start_vallenplan).grid(row=5, column=0, columnspan=2, pady=5)
+        Stop-Process -Id $proc.Id -Force
 
-    root.mainloop()
-
-# 🚀 Entry point
-if __name__ == "__main__":
-
-    start_gui()
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AHlauncher-Windows
+        path: dist/AHlauncher
